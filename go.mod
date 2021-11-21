@@ -21,6 +21,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hybridgroup/go-ardrone v0.0.0-20140402002621-b9750d8d7b78 // indirect
 	github.com/hybridgroup/mjpeg v0.0.0-20140228234708-4680f319790e // indirect
+	github.com/kebhr/mhz19 v0.0.0-20201124132144-b0bf155cd94f // indirect
 	github.com/muka/go-bluetooth v0.0.0-20211109193629-8bd60d407484 // indirect
 	github.com/nats-io/nats.go v1.13.0 // indirect
 	github.com/nats-io/nkeys v0.3.0 // indirect
@@ -30,6 +31,7 @@ require (
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/sigurn/crc8 v0.0.0-20160107002456-e55481d6f45c // indirect
 	github.com/sigurn/utils v0.0.0-20190728110027-e1fefb11a144 // indirect
+	github.com/tarm/serial v0.0.0-20180830185346-98f6abe2eb07 // indirect
 	github.com/urfave/cli v1.22.5 // indirect
 	github.com/veandco/go-sdl2 v0.4.10 // indirect
 	go.bug.st/serial v1.3.3 // indirect
