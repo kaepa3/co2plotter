@@ -15,8 +15,8 @@ import (
 func main() {
 	initlog("log.txt")
 	log.Info("start")
-	//robot := creteBlinkingRobot()
-	//go robot.Start()
+	robot := creteBlinkingRobot()
+	go robot.Start()
 
 	go func() {
 		co2Robot := mhz19.MHZ19{}
@@ -40,15 +40,15 @@ func main() {
 	}()
 
 	time.Sleep(time.Minute * 1)
-	//	if err := robot.Stop(); err != nil {
-	//		log.Error(err)
-	//	}
+	if err := robot.Stop(); err != nil {
+		log.Error(err)
+	}
 	log.Info("app end")
 }
 
 func creteBlinkingRobot() *gobot.Robot {
 	r := raspi.NewAdaptor()
-	led := gpio.NewLedDriver(r, "11")
+	led := gpio.NewLedDriver(r, "37")
 
 	work := func() {
 		gobot.Every(2*time.Second, func() {
