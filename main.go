@@ -1,66 +1,37 @@
 package main
 
 import (
-	"fmt"
-	"time"
-
-	"github.com/kebhr/mhz19"
+	"github.com/kaepa3/co2plotter/pkg/blinkled"
+	"github.com/kaepa3/co2plotter/pkg/co2loader"
 	log "github.com/sirupsen/logrus"
-	"gobot.io/x/gobot"
-	"gobot.io/x/gobot/drivers/gpio"
-	"gobot.io/x/gobot/platforms/raspi"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 func main() {
 	initlog("log.txt")
 	log.Info("start")
-	robot := creteBlinkingRobot()
+	robot := blinkled.CreteBlinkingRobot(37)
 	go robot.Start()
 
-	go func() {
-		co2Robot := mhz19.MHZ19{}
-		if err := co2Robot.Connect(); err != nil {
-			log.Error(err)
-			return
-		}
-		fmt.Println("start")
-		for cnt := 0; cnt < 8; cnt++ {
-			val, err := co2Robot.ReadCO2()
-			if err != nil {
-				log.Error(err)
-			} else {
-				logstr := fmt.Sprintf("co2:%d", val)
-				fmt.Println(logstr)
-				log.Info(logstr)
-			}
-			time.Sleep(time.Second * 1)
-		}
-		fmt.Println("end")
-	}()
+	done := make(chan struct{})
+	conf := co2loader.Config{IsMock: true, Value: 2, Interval: 1}
+	co2Chan, errChan := co2loader.CreateCo2Loader(conf, done)
 
-	time.Sleep(time.Minute * 1)
+	counter := 0
+	for counter < 10 {
+		select {
+		case v := <-co2Chan:
+			log.Println("co2:", v)
+			counter++
+		case v := <-errChan:
+			log.Println("err:", v)
+			counter++
+		}
+	}
 	if err := robot.Stop(); err != nil {
 		log.Error(err)
 	}
 	log.Info("app end")
-}
-
-func creteBlinkingRobot() *gobot.Robot {
-	r := raspi.NewAdaptor()
-	led := gpio.NewLedDriver(r, "37")
-
-	work := func() {
-		gobot.Every(2*time.Second, func() {
-			led.Toggle()
-		})
-	}
-
-	return gobot.NewRobot("blinkLED",
-		[]gobot.Connection{r},
-		[]gobot.Device{led},
-		work,
-	)
 }
 
 func initlog(path string) {
