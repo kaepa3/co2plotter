@@ -10,11 +10,11 @@ import (
 func main() {
 	initlog("log.txt")
 	log.Info("start")
-	robot := blinkled.CreteBlinkingRobot(37)
+	robot := blinkled.CreteBlinkingRobot(38)
 	go robot.Start()
 
 	done := make(chan struct{})
-	conf := co2loader.Config{IsMock: true, Value: 2, Interval: 1}
+	conf := co2loader.Config{IsMock: false, Value: 2, Interval: 1}
 	co2Chan, errChan := co2loader.CreateCo2Loader(conf, done)
 
 	counter := 0
